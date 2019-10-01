@@ -1,5 +1,5 @@
 {
-  "name": "jslib",
+  "name": "@scirelli/jslib",
   "version": "1.0.0",
   "description": "Helpful JavaScript functions and classes.",
   "main": "index.js",
