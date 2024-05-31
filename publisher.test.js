@@ -49,4 +49,4 @@ const logger = new LogPublisher()
 	.subscribe(delayedSubscriber);
 
 logger.debug('A debug log');
-logger.info('An info log');
+logger.info('An info log', 'more args', 'to', 'send');
