@@ -1,7 +1,5 @@
 const Publisher = require('./publisher.js');
 
-const p = new Publisher();
-
 class LogPublisher extends Publisher {
 	debug() {
 		this.notify('debug', ...arguments);
@@ -35,7 +33,7 @@ const consoleSubscriber = {
 	delayedSubscriber = {
 		later: function(){
 			setTimeout(()=>{
-				console.log.call(console, 'Some time later: ', ...arguments);
+				console.log('Some time later: ', ...arguments);
 			}, 1000);
 		},
 		ondebug: function(){this.later(...arguments)},
