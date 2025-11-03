@@ -99,3 +99,17 @@ Array.prototype.addTypeOf = function( sType, obj, fncError ){
         fncError(); 
     }
 }
+
+if(Array.prototype.chunk){
+		Array.prototype.chunk = async function chunk(func, chunkSize=500, index=0) {
+				if(index >= this.length) return Promise.resolve(true);
+				if(chunkSize <= 0) chunkSize = 1;
+				if(index <= 0) index = 0;
+				for(csz=0; csz<chunkSize && index<this.length; index++, csz++){
+						func(this[index]);
+				}
+				return new Promise(resolve=>{
+						resolve(this.chunk(func, chunkSize, index));
+				});
+		}
+}
