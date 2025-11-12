@@ -74,42 +74,49 @@ if( !Array.prototype.remove )
       }
     }
 
-Array.prototype.addInstanceOf = function( oInstance, obj, fncError ){
-    if( obj instanceof Array ){
-        for( var i=0, l=obj.length,itm=null; i<l; i++ ){
-            this.addInstanceOf( obj[i], oInstance );
-        }
-    }else if( obj instanceof oInstance ){
-        this.push(obj);
-    }else{
-        fncError = fncError || function(){};
-        fncError(); 
-    }
+if(!Array.prototype.addInstanceOf)
+	Array.prototype.addInstanceOf = function( oInstance, obj, fncError ) {
+	    if( obj instanceof Array ){
+	        for( var i=0, l=obj.length,itm=null; i<l; i++ ){
+	            this.addInstanceOf( obj[i], oInstance );
+	        }
+	    }else if( obj instanceof oInstance ){
+	        this.push(obj);
+	    }else{
+	        fncError = fncError || function(){};
+	        fncError(); 
+	    }
+	}
+
+if(!Array.prototype.addTypeOf)
+	Array.prototype.addTypeOf = function( sType, obj, fncError ) {
+	    if( obj instanceof Array ){
+	        for( var i=0, l=obj.length,itm=null; i<l; i++ ){
+	            this.addTypeOf( obj[i], sType );
+	        }
+	    }else if( typeof(obj) == sType ){
+	        this.push(obj);
+	    }else{
+	        fncError = fncError || function(){};
+	        fncError(); 
+	    }
+	}
+
+if(!Array.prototype.chunk) {
+    Array.prototype.chunk = async function chunk(func, chunkSize=500, index=0) {
+        if(index >= this.length) return Promise.resolve(true);
+            if(chunkSize <= 0) chunkSize = 1;
+            if(index <= 0) index = 0;
+            for(var csz=0; csz<chunkSize && index<this.length; index++, csz++){ // Use var for csz
+                func(this[index]);
+            }
+        return new Promise(resolve => {
+              // Use requestAnimationFrame to yield to the main thread
+              requestAnimationFrame(() => {
+                resolve(this.chunk(func, chunkSize, index));
+              });
+         });
+     }
 }
 
-Array.prototype.addTypeOf = function( sType, obj, fncError ){
-    if( obj instanceof Array ){
-        for( var i=0, l=obj.length,itm=null; i<l; i++ ){
-            this.addTypeOf( obj[i], sType );
-        }
-    }else if( typeof(obj) == sType ){
-        this.push(obj);
-    }else{
-        fncError = fncError || function(){};
-        fncError(); 
-    }
-}
 
-if(Array.prototype.chunk){
-		Array.prototype.chunk = async function chunk(func, chunkSize=500, index=0) {
-				if(index >= this.length) return Promise.resolve(true);
-				if(chunkSize <= 0) chunkSize = 1;
-				if(index <= 0) index = 0;
-				for(csz=0; csz<chunkSize && index<this.length; index++, csz++){
-						func(this[index]);
-				}
-				return new Promise(resolve=>{
-						resolve(this.chunk(func, chunkSize, index));
-				});
-		}
-}
